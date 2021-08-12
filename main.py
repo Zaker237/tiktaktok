@@ -1,4 +1,5 @@
 import easygui
+import random
 
 easygui.msgbox(
     "Setzen Sie Ihre Markierung in ein freies Feld. Der Spieler, der als Erstes drei gleiche Farben in eine Zeile, Spalte oder Diagonale setzt gewinnt.",
@@ -44,6 +45,9 @@ class TikTakTok(QMainWindow):
 
         # set the GUI
         self._define_ui()
+
+        if self.player['is_computer']:
+            self._computer_play()
 
 
     def _define_players(self, player1, player2):
@@ -97,8 +101,11 @@ class TikTakTok(QMainWindow):
 
         for i in range(3):
             for j in range(3):
+                # set the text to ""
+                self.buttons[i][j].setText("")
+
                 # set the buttons sizes
-                self.buttons[i][j].setGeometry(x*i + 20, y*j + 20, 100, 100)
+                self.buttons[i][j].setGeometry(x*i + 20, y*j + 20, 80, 80)
 
                 # setting font to the button
                 self.buttons[i][j].setFont(QFont(QFont('Times', 17)))
@@ -124,6 +131,8 @@ class TikTakTok(QMainWindow):
 
         # setting font to the label
         self.label.setFont(QFont('Times', 15))
+
+        self.label.setText(f"{self.player['name']} turn")
 
         # creating push button to restart the score
         self.reset_game = QPushButton("Reset-Game", self)
@@ -163,15 +172,46 @@ class TikTakTok(QMainWindow):
                 for btn in btns:
                     btn.setEnabled(False)
 
+            # setting text to the label
+            self.label.setText(text)
+            return
+
         # if winner is not decided and total times is 9, the game has no issue
         elif self.times == 9:
+            print(self.times)
             text = "This Game has no issue"
 
-        # setting text to the label
-        self.label.setText(text)
+            # setting text to the label
+            self.label.setText(text)
+            return
 
         # change the current player
         self._switch_player()
+
+        # change the text for the player
+        self.label.setText(f"{self.player['name']} turn")
+
+        ### if the player is a computer and play automatic
+        if self.player['is_computer']:
+            self._computer_play()
+
+    def _computer_play(self):
+        frei_buttton = []
+        for i in range(3):
+            for j in range(3):
+                if self.buttons[i][j].text() == "":
+                    frei_buttton.append((i,j))
+            
+        size = len(frei_buttton)
+
+        if size <= 1:
+            idx = 0
+        else:
+            idx = random.randint(0, size-1)
+
+        btn_i, btn_j = frei_buttton[idx]
+
+        self.buttons[btn_i][btn_j].clicked.emit()
 
     def _check_winner(self):
         # check the all the rows (if the row has the same text)
@@ -205,7 +245,6 @@ class TikTakTok(QMainWindow):
         
     def _reset_the_game(self):
         # resetting values
-        self.turn = 0
         self.times = 0
   
         # making label text empty:
@@ -224,18 +263,26 @@ class TikTakTok(QMainWindow):
 
         self.player = self.player_1
 
+        # change the text for the player
+        self.label.setText(f"{self.player['name']} turn")
+
+        if self.player['is_computer']:
+            self._computer_play()
+
 
 def main():
     player_1 = {
-        "name": "alex",
+        "name": "Alex",
         "value": "X",
-        "color": "blue"
+        "color": "blue",
+        "is_computer": True
     }
 
     player_2 = {
-        "name": "zaker",
+        "name": "Computer",
         "value": "O",
-        "color": "yellow"
+        "color": "yellow",
+        "is_computer": True
     }
 
     app = QApplication(sys.argv)
