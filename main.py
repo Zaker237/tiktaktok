@@ -41,7 +41,7 @@ class TikTakTok(QMainWindow):
         self._define_players(player1, player2)
 
         # get the windows size
-        self.setGeometry(100, 100, 300, 500)
+        self.setGeometry(100, 100, 360, 550)
 
         # set the GUI
         self._define_ui()
@@ -96,8 +96,8 @@ class TikTakTok(QMainWindow):
             self.buttons.append(row)
 
         # x and y co-ordinate
-        x = 90
-        y = 90
+        x = 110
+        y = 110
 
         for i in range(3):
             for j in range(3):
@@ -105,7 +105,7 @@ class TikTakTok(QMainWindow):
                 self.buttons[i][j].setText("")
 
                 # set the buttons sizes
-                self.buttons[i][j].setGeometry(x*i + 20, y*j + 20, 80, 80)
+                self.buttons[i][j].setGeometry(x*i + 20, y*j + 20, 100, 100)
 
                 # setting font to the button
                 self.buttons[i][j].setFont(QFont(QFont('Times', 17)))
@@ -117,7 +117,7 @@ class TikTakTok(QMainWindow):
         self.label = QLabel(self)
   
         # setting geometry to the label
-        self.label.setGeometry(20, 300, 260, 60)
+        self.label.setGeometry(50, 370, 260, 60)
   
         # setting style sheet to the label
         self.label.setStyleSheet("QLabel"
@@ -138,7 +138,7 @@ class TikTakTok(QMainWindow):
         self.reset_game = QPushButton("Reset-Game", self)
   
         # setting geometry
-        self.reset_game.setGeometry(50, 380, 200, 50)
+        self.reset_game.setGeometry(80, 450, 200, 50)
   
         # adding action action to the reset push button
         self.reset_game.clicked.connect(self._reset_the_game)
